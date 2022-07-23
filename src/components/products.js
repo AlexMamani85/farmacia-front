@@ -1,5 +1,6 @@
 import apiFetch from "../context/api-fetch.js";
 import React, { useState } from 'react';
+import Product from './product'
 
 const Products = () =>{
 
@@ -18,7 +19,11 @@ const Products = () =>{
         },[]);
 
     return(
-        <div>hi6</div>
+        <div>
+            {productos && productos.map(data=>{return <Product key={data.id} data={data}></Product>})}
+            {!productos && <div>nada</div>}
+
+        </div>
     );
 }
 
