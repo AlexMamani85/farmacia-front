@@ -1,6 +1,7 @@
 import apiFetch from "../context/api-fetch.js";
 import React, { useState } from 'react';
 import Product from './product'
+import "bootstrap/dist/css/bootstrap.min.css"
 
 const Products = () =>{
 
@@ -20,7 +21,24 @@ const Products = () =>{
 
     return(
         <div>
-            {productos && productos.map(data=>{return <Product key={data.id} data={data}></Product>})}
+            <table className="table-primary table-hover table-striped">
+                <tr scope="row">
+                    <th >Name</th>
+                    <th >Quantity</th>
+                    <th >Price</th>
+                    <th >Laboratory</th>
+                </tr>
+            {productos && productos.map(data=>{return (
+                <>
+
+                    <tr scope="row">
+                        <Product key={data.id} data={data}></Product>
+
+                    </tr>
+                </>
+            )})}
+
+            </table>
             {!productos && <div>nada</div>}
 
         </div>
