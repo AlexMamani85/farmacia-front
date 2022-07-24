@@ -1,11 +1,12 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-
+import { Formik, Form, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import {createProduct} from '../context/product-services'
 const CreateForm = () =>{
-
+  const navigate = useNavigate()
 return(
     <div>
       <Formik
-        initialValues={{ name: '', quantity: '', price: '', laboratory: '' }}
+        initialValues={{ name: 'abc', quantity: '1', price: '1.99', laboratory: 'Genfar' }}
         
         validate={(values) => {
           const errors = {};
@@ -15,6 +16,7 @@ return(
             name: /([a-zA-Z0-9_\s]+)/,
             quantity: /\d{1,5}$/,
             price: /\d{1,4}$/,
+            laboratory: /\w{1,}/,
             }
 
           // !!!! --->>> STATIC, no es necesario cambiar, verificarRegex es una funcion <<<---
@@ -39,44 +41,56 @@ return(
           return errors;
         }}
 
-        onSubmit={(values, { setSubmitting }) => {
+
+        onSubmit={(values) => {
+          // alert(JSON.stringify(values, null, 2));
           setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
+            createProduct(values);
+            navigate('/');
           }, 400);
         }}
       >
-        {({ isSubmitting }) => (
+        {({   values,
+              errors,
+              touched,
+              onSubmit,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting, }) => (
           <>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label for="name" className="col-sm-2 col-form-label">name</label>
+              <label htmlFor="name" className="col-sm-2 col-form-label">name</label>
               <Field type="text" name="name" />
-              <ErrorMessage name="name" component="div" />
+              {errors.name && touched.name && 
+                <p style={{color:"red"}}>{errors.name}</p>}
             </div>
-            <div div className="mb-3">
-              <label for="quantity" className="col-sm-2 col-form-label">quantity</label>
+            <div className="mb-3">
+              <label htmlFor="quantity" className="col-sm-2 col-form-label">quantity</label>
               <Field type="number" name="quantity" min="1" max="10000" step="1"/>
-              <ErrorMessage name="quantity" component="div" />
+              {errors.quantity && touched.quantity && 
+                <p style={{color:"red"}}>{errors.quantity}</p>}
             </div>
-            <div div className="mb-3">
-              <label for="price" className="col-sm-2 col-form-label">price</label>
+            <div  className="mb-3">
+              <label htmlFor="price" className="col-sm-2 col-form-label">price</label>
               <Field type="number" step="0.01" name="price" min="0.1" max="1000" />
-              <ErrorMessage name="email" component="div" />
+              {errors.price && touched.price && 
+                <p style={{color:"red"}}>{errors.price}</p>}
             </div>
-            <div div className="mb-3">
-              <label for="laboratory" className="col-sm-2 col-form-label">Choose a laboratory:</label>
+            <div className="mb-3">
+              <label htmlFor="laboratory" className="col-sm-2 col-form-label">Choose a laboratory:</label>
 
-              <select name="laboratory" id="laboratory">
+              <Field as="select" id="" defaultValue='GSK' name="laboratory" >
                 <option value="Genfar">Genfar</option>
                 <option value="GSK">GSK</option>
                 <option value="Hersil">Hersil</option>
                 <option value="FarmaIndustria”">FarmaIndustria</option>
-              </select>
-              <ErrorMessage name="password" component="div" />
+              </Field>
+              {errors.laboratory && touched.laboratory && 
+                <p style={{color:"red"}}>{errors.laboratory}</p>}
             </div>
 
-            {/*  name: '', quantity: '', price: '', laboratory: '' */}
             <button type="submit" disabled={isSubmitting}>
               Submit
             </button>
