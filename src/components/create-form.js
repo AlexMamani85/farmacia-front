@@ -6,12 +6,11 @@ const CreateForm = () =>{
 return(
     <div>
       <Formik
-        initialValues={{ name: 'abc', quantity: '1', price: '1.99', laboratory: 'Genfar' }}
+        initialValues={{ name: '', quantity: '', price: '', laboratory: 'Genfar' }}
         
         validate={(values) => {
           const errors = {};
 
-          // !!!! --->>> validaciones regex de las Values <<<---
           const regexSentences = {
             name: /([a-zA-Z0-9_\s]+)/,
             quantity: /\d{1,5}$/,
@@ -19,17 +18,14 @@ return(
             laboratory: /\w{1,}/,
             }
 
-          // !!!! --->>> STATIC, no es necesario cambiar, verificarRegex es una funcion <<<---
           function verificarObjectRegex(objeto){
             objeto.map(texto=>{
             if (!regexSentences[texto].test(values[texto])) {
               errors[texto] = "Not valid "+texto;}
            })
           }
-          // !!!! --->>> STATIC, no es necesario cambiar (solo usa las keys del objeto Values, osea los campos) <<<---
           verificarObjectRegex(Object.keys(values))
 
-          // !!!! --->>> si se necesita se agrega mas Info al mensaje de error <<<---
           function addInfoError(variable,message){
             if (errors[variable]){
               errors[variable]=errors[variable]+message
